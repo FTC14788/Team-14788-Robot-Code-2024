@@ -9,16 +9,16 @@ import org.firstinspires.ftc.teamcode.subsystems.MecanumSubsystem;
 
 abstract public class OpModeContainer extends CommandOpMode {
 
-    protected MecanumSubsystem m_mecanumDrive;
+    protected MecanumSubsystem mecanumSubsystem;
 
 
     protected GamepadEx driverController;
     protected GamepadEx operatorController;
 
     protected void initHardware(Enum OpModeType) {
-        m_mecanumDrive = new MecanumSubsystem(hardwareMap);
+        mecanumSubsystem = new MecanumSubsystem(hardwareMap);
 
-        register(m_mecanumDrive);
+        register(mecanumSubsystem);
 
         driverController = new GamepadEx(gamepad1);
         operatorController = new GamepadEx(gamepad2);
