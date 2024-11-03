@@ -154,11 +154,7 @@ public class MecanumSubsystem implements Subsystem {
     }
 
     public static void createInstance(HardwareMap hardwareMap) {
-        if (instance == null) {
-            instance = new MecanumSubsystem(hardwareMap);
-        } else {
-            System.out.println("Mecanum Subsystem already instantiated");
-        }
+        instance = new MecanumSubsystem(hardwareMap);
     }
 
     public static MecanumSubsystem getInstance() {
@@ -187,7 +183,14 @@ public class MecanumSubsystem implements Subsystem {
 
         // TODO: Make sure that this is the direction your motors need to be reversed in.
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
         leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         motors = Arrays.asList(leftFront, leftRear, rightFront, rightRear);
 
@@ -209,6 +212,8 @@ public class MecanumSubsystem implements Subsystem {
 
     @Override
     public void periodic(){
+
+        update();
         poseUpdater.update();
     }
 
@@ -224,10 +229,12 @@ public class MecanumSubsystem implements Subsystem {
     /**
      * This handles the limiting of the drive powers array to the max power.
      */
-    public void limitDrivePowers() {
+    public void normalizeDrivePowers() {
         for (int i = 0; i < drivePowers.length; i++) {
-            if (Math.abs(drivePowers[i]) > maxPower) {
+            if (Math.abs(drivePowers[i] * maxPower) > maxPower) {
                 drivePowers[i] = maxPower * MathFunctions.getSign(drivePowers[i]);
+            } else {
+                drivePowers[i] *= maxPower;
             }
         }
     }
@@ -474,7 +481,7 @@ public class MecanumSubsystem implements Subsystem {
 
                     drivePowers = driveVectorScaler.getDrivePowers(MathFunctions.scalarMultiplyVector(getTranslationalCorrection(), holdPointTranslationalScaling), MathFunctions.scalarMultiplyVector(getHeadingVector(), holdPointHeadingScaling), new Vector(), poseUpdater.getEstimatedPose().getTheta());
 
-                    limitDrivePowers();
+                    normalizeDrivePowers();
 
                     for (int i = 0; i < motors.size(); i++) {
                         motors.get(i).setPower(drivePowers[i]);
@@ -487,7 +494,7 @@ public class MecanumSubsystem implements Subsystem {
 
                         drivePowers = driveVectorScaler.getDrivePowers(getCorrectiveVector(), getHeadingVector(), getDriveVector(), poseUpdater.getEstimatedPose().getTheta());
 
-                        limitDrivePowers();
+                        normalizeDrivePowers();
 
                         for (int i = 0; i < motors.size(); i++) {
                             motors.get(i).setPower(drivePowers[i]);
@@ -531,7 +538,7 @@ public class MecanumSubsystem implements Subsystem {
 
             drivePowers = driveVectorScaler.getDrivePowers(getCentripetalForceCorrection(), teleopHeadingVector, teleopDriveVector, poseUpdater.getEstimatedPose().getTheta());
 
-            limitDrivePowers();
+            normalizeDrivePowers();
 
             for (int i = 0; i < motors.size(); i++) {
                 motors.get(i).setPower(drivePowers[i]);
@@ -574,6 +581,7 @@ public class MecanumSubsystem implements Subsystem {
         }
 
         teleopHeadingVector.setComponents(teleopDriveValues[2], getPose().getTheta());
+
     }
 
     /**

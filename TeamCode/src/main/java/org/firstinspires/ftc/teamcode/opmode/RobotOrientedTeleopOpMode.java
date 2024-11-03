@@ -8,8 +8,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryInternal;
 import org.firstinspires.ftc.teamcode.util.OpModeContainer;
 
-@TeleOp(name = "FieldOriented")
-public class MainTeleopOpMode extends OpModeContainer {
+@TeleOp(name = "RobotOriented")
+public class RobotOrientedTeleopOpMode extends OpModeContainer {
 
     @Override
     public void initialize() {
@@ -25,7 +25,7 @@ public class MainTeleopOpMode extends OpModeContainer {
     public void run() {
         super.run();
 
-//        mecanumSubsystem.setTeleOpMovementVectors(driverController.getLeftY(), -driverController.getLeftX(), -driverController.getRightX(), true);
-        mecanumSubsystem.setTeleOpMovementVectors(driverController.getLeftY(), -driverController.getLeftX(), -driverController.getRightX(), false);
+        mecanumSubsystem.setTeleOpMovementVectors(driverController.getLeftY(), -driverController.getLeftX(), -driverController.getRightX(), true);
+//        mecanumSubsystem.setTeleOpMovementVectors(driverController.getLeftY(), -driverController.getLeftX(), -driverController.getRightX(), false);
     }
 }

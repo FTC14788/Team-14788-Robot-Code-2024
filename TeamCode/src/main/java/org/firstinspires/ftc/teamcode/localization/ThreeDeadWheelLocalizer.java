@@ -24,6 +24,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.constants.LocalizerConstants;
 import org.firstinspires.ftc.teamcode.pathGeneration.Vector;
+import org.firstinspires.ftc.teamcode.subsystems.OctoquadManager;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -31,8 +32,6 @@ import java.util.concurrent.Executors;
 @Config
 public final class ThreeDeadWheelLocalizer extends Localizer {
     public static LocalizerConstants localizerConstants = new LocalizerConstants();
-
-    public final Encoder leftEncoder, rightEncoder, strafeEncoder;
 
     public double inPerTick = 0.002948; //0.002934; //24.0 / 8163.0;;
 
@@ -59,13 +58,6 @@ public final class ThreeDeadWheelLocalizer extends Localizer {
     public Pose2d pose = new Pose2d(0.0,0.0,0.0);
 
     public ThreeDeadWheelLocalizer(HardwareMap hardwareMap) {
-        leftEncoder = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "par")));
-        leftEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        rightEncoder = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "rightBack")));
-        rightEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        strafeEncoder = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "intake_for_perp")));
 
         LazyImu lazyImu;
         lazyImu = new LazyImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
@@ -74,9 +66,9 @@ public final class ThreeDeadWheelLocalizer extends Localizer {
         imu = lazyImu.get();
         imu.resetYaw();
 
-        lastPar0Pos = leftEncoder.getPositionAndVelocity().position;
-        lastPar1Pos = rightEncoder.getPositionAndVelocity().position;
-        lastPerpPos = strafeEncoder.getPositionAndVelocity().position;
+        lastPar0Pos = OctoquadManager.getInstance().getPosition(0);
+        lastPar1Pos = OctoquadManager.getInstance().getPosition(1);
+        lastPerpPos = OctoquadManager.getInstance().getPosition(2);
     }
 
     public void startIMUThread(LinearOpMode opMode) {
@@ -101,9 +93,9 @@ public final class ThreeDeadWheelLocalizer extends Localizer {
 
         ElapsedTime loopTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
-        PositionVelocityPair par0PosVel = leftEncoder.getPositionAndVelocity();
-        PositionVelocityPair par1PosVel = rightEncoder.getPositionAndVelocity();
-        PositionVelocityPair perpPosVel = strafeEncoder.getPositionAndVelocity();
+        PositionVelocityPair par0PosVel = OctoquadManager.getInstance().getPosVelPair(0);
+        PositionVelocityPair par1PosVel = OctoquadManager.getInstance().getPosVelPair(1);
+        PositionVelocityPair perpPosVel = OctoquadManager.getInstance().getPosVelPair(2);
 
         if (!initialized) {
             initialized = true;
