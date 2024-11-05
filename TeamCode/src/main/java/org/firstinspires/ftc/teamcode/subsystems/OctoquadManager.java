@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.hardware.digitalchickenlabs.OctoQuad;
+import com.qualcomm.hardware.digitalchickenlabs.OctoQuadBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class OctoquadManager extends SubsystemBase {
@@ -13,6 +14,7 @@ public class OctoquadManager extends SubsystemBase {
     private final int PAR_2 = 2;
 
     private final int PIVOT_REMOTE = 3;
+    private final int ELBOW_REMOTE = 4;
     
     private OctoQuad octo;
 
@@ -21,6 +23,7 @@ public class OctoquadManager extends SubsystemBase {
     private int par2Pos;
 
     private int pivotRemotePos;
+    private int elbowRemotePos;
 
     private short par0Vel;
     private short par1Vel;
@@ -32,6 +35,8 @@ public class OctoquadManager extends SubsystemBase {
         octo.setSingleEncoderDirection(PAR_0,  OctoQuad.EncoderDirection.REVERSE);
         octo.setSingleEncoderDirection(PAR_1, OctoQuad.EncoderDirection.FORWARD);
         octo.setSingleEncoderDirection(PAR_2,  OctoQuad.EncoderDirection.FORWARD);
+        octo.setSingleEncoderDirection(PIVOT_REMOTE, OctoQuad.EncoderDirection.REVERSE);
+        octo.setSingleEncoderDirection(ELBOW_REMOTE, OctoQuad.EncoderDirection.REVERSE);
 
         octo.saveParametersToFlash();
         octo.resetAllPositions();
@@ -59,6 +64,7 @@ public class OctoquadManager extends SubsystemBase {
         par1Pos = positions[1];
         par2Pos = positions[2];
         pivotRemotePos = positions[3];
+        elbowRemotePos = positions[4];
 
         par0Vel = velocities[0];
         par1Vel = velocities[1];
@@ -75,6 +81,8 @@ public class OctoquadManager extends SubsystemBase {
                 return par2Pos;
             case 3:
                 return pivotRemotePos;
+            case 4:
+                return elbowRemotePos;
             default:
                 return 0;
         }

@@ -16,9 +16,9 @@ public class RobotOrientedTeleopOpMode extends OpModeContainer {
         initHardware(OpModeType.TELEOP);
         mecanumSubsystem.startTeleopDrive();
 
-        new GamepadButton(driverController, GamepadKeys.Button.A).whenPressed(() -> pivotSubsystem.findOffset(3.5));
-        new GamepadButton(driverController, GamepadKeys.Button.B).whenPressed(() -> elbowSubsystem.findOffset(3.5));
-        new GamepadButton(driverController, GamepadKeys.Button.Y).whileHeld(() -> pivotSubsystem.goToPosition(-0.2));
+//        new GamepadButton(driverController, GamepadKeys.Button.A).whenPressed(() -> pivotSubsystem.findOffset(3.5));
+//        new GamepadButton(driverController, GamepadKeys.Button.B).whenPressed(() -> elbowSubsystem.findOffset(3.5));
+//        new GamepadButton(driverController, GamepadKeys.Button.Y).whileHeld(() -> pivotSubsystem.goToPosition(-0.2));
     }
 
     @Override

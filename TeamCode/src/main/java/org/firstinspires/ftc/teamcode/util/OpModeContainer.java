@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 
 import org.firstinspires.ftc.teamcode.subsystems.ElbowSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.ExtensionSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.OctoquadManager;
 import org.firstinspires.ftc.teamcode.subsystems.PivotSubsystem;
@@ -16,6 +17,7 @@ abstract public class OpModeContainer extends CommandOpMode {
     protected MecanumSubsystem mecanumSubsystem;
     protected PivotSubsystem pivotSubsystem;
     protected ElbowSubsystem elbowSubsystem;
+    protected ExtensionSubsystem extensionSubsystem;
 
 
     protected GamepadEx driverController;
@@ -29,8 +31,9 @@ abstract public class OpModeContainer extends CommandOpMode {
         mecanumSubsystem = MecanumSubsystem.getInstance();
         pivotSubsystem = new PivotSubsystem(hardwareMap);
         elbowSubsystem = new ElbowSubsystem(hardwareMap);
+        extensionSubsystem = new ExtensionSubsystem(hardwareMap);
 
-        register(mecanumSubsystem, octoquadManager, pivotSubsystem);
+        register(mecanumSubsystem, octoquadManager, pivotSubsystem, extensionSubsystem);
 
         driverController = new GamepadEx(gamepad1);
         operatorController = new GamepadEx(gamepad2);
