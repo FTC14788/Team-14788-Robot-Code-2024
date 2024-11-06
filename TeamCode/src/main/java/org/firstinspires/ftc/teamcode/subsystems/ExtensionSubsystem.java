@@ -31,7 +31,7 @@ public class ExtensionSubsystem extends SubsystemBase {
     private boolean homing = true;
     private double currentCutoff = 2;
 
-    private PIDFCoefficients pidfCoefficients = new PIDFCoefficients(0.4, 0, 0, 0);
+    private PIDFCoefficients pidfCoefficients = new PIDFCoefficients(1, 0, 0, 0);
 
     public ExtensionSubsystem(HardwareMap hardwareMap) {
         extension = hardwareMap.get(DcMotorEx.class, "extension");

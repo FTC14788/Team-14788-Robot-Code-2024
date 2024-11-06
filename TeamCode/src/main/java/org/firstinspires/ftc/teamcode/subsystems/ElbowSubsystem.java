@@ -31,7 +31,7 @@ public class ElbowSubsystem extends SubsystemBase {
     private double targetPosition = 0;
 
     private PIDFController pivotPIDF;
-    private CustomPIDFCoefficients pidfCoefficients = new CustomPIDFCoefficients(0.002, 0, 0, 0);
+    private CustomPIDFCoefficients pidfCoefficients = new CustomPIDFCoefficients(0.0025, 0, 0, 0);
 
     public ElbowSubsystem(HardwareMap hardwareMap) {
 
@@ -49,7 +49,7 @@ public class ElbowSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println("Current: " + currentPosition.getAsDouble() + " Target: " + targetPosition);
+//        System.out.println("Current: " + currentPosition.getAsDouble() + " Target: " + targetPosition);
 
         elbow.setDirection(DcMotorSimple.Direction.REVERSE);
         if (homing) {
