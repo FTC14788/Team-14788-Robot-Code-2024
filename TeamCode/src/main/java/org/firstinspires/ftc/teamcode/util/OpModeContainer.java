@@ -7,9 +7,12 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 
 import org.firstinspires.ftc.teamcode.subsystems.ElbowSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ExtensionSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.OctoquadManager;
 import org.firstinspires.ftc.teamcode.subsystems.PivotSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.StateMachine;
 
 abstract public class OpModeContainer extends CommandOpMode {
 
@@ -18,10 +21,16 @@ abstract public class OpModeContainer extends CommandOpMode {
     protected PivotSubsystem pivotSubsystem;
     protected ElbowSubsystem elbowSubsystem;
     protected ExtensionSubsystem extensionSubsystem;
+    protected LiftSubsystem liftSubsystem;
+    protected IntakeSubsystem intakeSubsystem;
+
+    protected StateMachine state;
 
 
     protected GamepadEx driverController;
     protected GamepadEx operatorController;
+
+    protected boolean fieldOrientedTeleop = false;
 
     protected void initHardware(Enum OpModeType) {
         OctoquadManager.createInstance(hardwareMap);
@@ -32,8 +41,12 @@ abstract public class OpModeContainer extends CommandOpMode {
         pivotSubsystem = new PivotSubsystem(hardwareMap);
         elbowSubsystem = new ElbowSubsystem(hardwareMap);
         extensionSubsystem = new ExtensionSubsystem(hardwareMap);
+        liftSubsystem = new LiftSubsystem(hardwareMap);
+        intakeSubsystem = new IntakeSubsystem(hardwareMap);
 
-        register(mecanumSubsystem, octoquadManager, pivotSubsystem, extensionSubsystem);
+        StateMachine.createInstance(pivotSubsystem, elbowSubsystem, extensionSubsystem, liftSubsystem);
+
+        register(mecanumSubsystem, octoquadManager, pivotSubsystem, extensionSubsystem, liftSubsystem, intakeSubsystem);
 
         driverController = new GamepadEx(gamepad1);
         operatorController = new GamepadEx(gamepad2);

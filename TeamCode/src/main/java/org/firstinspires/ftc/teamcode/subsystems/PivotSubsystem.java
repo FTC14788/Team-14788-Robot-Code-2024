@@ -32,7 +32,7 @@ public class PivotSubsystem extends SubsystemBase {
     private double targetPosition = 0;
 
     private PIDFController pivotPIDF;
-    private CustomPIDFCoefficients pidfCoefficients = new CustomPIDFCoefficients(0.005, 0.0002, 0.000, 0);
+    private CustomPIDFCoefficients pidfCoefficients = new CustomPIDFCoefficients(0.0055, 0.0002, 0.000, 0);
 
     public PivotSubsystem(HardwareMap hardwareMap) {
 
@@ -64,12 +64,23 @@ public class PivotSubsystem extends SubsystemBase {
         }
 
         if (!homing) {
+            if (StateMachine.getInstance().elbowHoming().getAsBoolean()) {
+                goToPosition(0.13);
+            }
             pivot.setPower(calculateOutput((int) Math.round(targetPosition)));
         }
     }
 
+    public double getCurrentPosition() {
+        return currentPosition.getAsDouble();
+    }
+
+    public double getTargetPosition() {
+        return targetPosition;
+    }
+
     public void setTeleopDefaultCommand() {
-        setDefaultCommand(goToPositionCommand(() -> 0.2));
+        setDefaultCommand(goToPositionCommand(() -> 0.25));
     }
 
     private double calculateOutput(int target) {

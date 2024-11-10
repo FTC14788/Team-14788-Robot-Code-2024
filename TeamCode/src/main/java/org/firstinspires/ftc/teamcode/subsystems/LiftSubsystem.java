@@ -10,18 +10,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.constants.ElbowConstants;
 import org.firstinspires.ftc.teamcode.constants.ExtensionConstants;
-import org.firstinspires.ftc.teamcode.util.CustomPIDFCoefficients;
-import org.firstinspires.ftc.teamcode.util.PIDFController;
 
 import java.util.function.DoubleSupplier;
 
-import kotlin.Unit;
+public class LiftSubsystem extends SubsystemBase {
 
-public class ExtensionSubsystem extends SubsystemBase {
-
-    private final DcMotorEx extension;
+    private final DcMotorEx life;
 
     private final DoubleSupplier currentPosition;
     private final DoubleSupplier supplyCurrent;
@@ -29,47 +24,46 @@ public class ExtensionSubsystem extends SubsystemBase {
     private double targetPosition = 0;
 
     private boolean homing = true;
-    private double currentCutoff = 4;
+    private double currentCutoff = 3;
 
-    private PIDFCoefficients pidfCoefficients = new PIDFCoefficients(16, 0, 0, 0);
+    private PIDFCoefficients pidfCoefficients = new PIDFCoefficients(0.1, 0, 0, 0);
 
-    public ExtensionSubsystem(HardwareMap hardwareMap) {
-        extension = hardwareMap.get(DcMotorEx.class, "extension");
+    public LiftSubsystem(HardwareMap hardwareMap) {
+        life = hardwareMap.get(DcMotorEx.class, "lift");
 
-        extension.setDirection(DcMotorSimple.Direction.REVERSE);
-        extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        life.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        currentPosition = (() -> extension.getCurrentPosition());
-        supplyCurrent = (() -> extension.getCurrent(CurrentUnit.AMPS));
+        currentPosition = (() -> life.getCurrentPosition());
+        supplyCurrent = (() -> life.getCurrent(CurrentUnit.AMPS));
     }
 
     @Override
     public void periodic() {
 //        System.out.println(extension.getCurrentPosition() + " " + extension.getTargetPosition());
         if (homing) {
-            extension.setPower(-0.6);
+            life.setPower(-0.6);
         }
 
         if (supplyCurrent.getAsDouble() > currentCutoff && homing) {
-            extension.setPower(0);
-            extension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            life.setPower(0);
+            life.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             homing = false;
-            extension.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, pidfCoefficients);
+            life.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, pidfCoefficients);
         }
 
         if (!homing) {
-            extension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            extension.setPower(1);
-            extension.setTargetPosition((int) Math.round(targetPosition));
+            life.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            life.setPower(1);
+            life.setTargetPosition((int) Math.round(targetPosition));
         }
     }
 
     public double getCurrentPosition() {
-        return extension.getCurrentPosition();
+        return life.getCurrentPosition();
     }
 
     public double getTargetPosition() {
-        return extension.getTargetPosition();
+        return life.getTargetPosition();
     }
 
     public void setTeleopDefaultCommand() {
@@ -86,13 +80,10 @@ public class ExtensionSubsystem extends SubsystemBase {
     }
 
     private void goToPosition(double position) {
-        if (position > ExtensionConstants.MAX_EXTENSION_SPEEDY) {
-            position = ExtensionConstants.MAX_EXTENSION_SPEEDY;
+        if (position > ExtensionConstants.MAX_EXTENSION) {
+            position = ExtensionConstants.MAX_EXTENSION;
         }
-
-        double revolutionsPerMillimeter = (5.8 / 696.0);
-        double ticksPerRevolution = 537.7;
-        targetPosition = ((position * 25.4) * revolutionsPerMillimeter) * (ticksPerRevolution / 1);
+        targetPosition = ((position * 25.4) / 2) * (537.7 / 4);
 
     }
 }

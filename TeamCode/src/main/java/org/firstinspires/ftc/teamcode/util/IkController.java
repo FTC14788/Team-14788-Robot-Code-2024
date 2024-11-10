@@ -11,10 +11,11 @@ public class IkController {
 
         double x = dist + SuperstructureConstants.CHASSIS_FRONT_TO_PIVOT;
         double y = -SuperstructureConstants.PIVOT_HEIGHT + SuperstructureConstants.INTAKE_HEIGHT;
+
+        x -= y/130;
         
         double fixedAngle = Math.acos(x / SuperstructureConstants.NORMALIZATION_DIST);
-
-        System.out.println(fixedAngle);
+        fixedAngle = 0.53 * Math.PI;
 
         if ((fixedAngle / (Math.PI * 2)) <= PivotConstants.MIN_ANGLE) {
             fixedAngle = PivotConstants.MIN_ANGLE;
@@ -30,6 +31,7 @@ public class IkController {
         double elbowAngle = Math.atan2(yt, xt) - fixedAngle;
 
 
+        System.out.println((elbowAngle / (Math.PI * 2)));
         return new double[]{
             (fixedAngle / (Math.PI * 2)),
             (elbowAngle / (Math.PI * 2)),

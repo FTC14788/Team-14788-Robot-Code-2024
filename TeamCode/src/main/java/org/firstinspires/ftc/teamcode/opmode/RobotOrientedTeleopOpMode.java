@@ -8,7 +8,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryInternal;
 import org.firstinspires.ftc.teamcode.util.OpModeContainer;
 
-@TeleOp(name = "RobotOriented")
 public class RobotOrientedTeleopOpMode extends OpModeContainer {
 
     @Override
