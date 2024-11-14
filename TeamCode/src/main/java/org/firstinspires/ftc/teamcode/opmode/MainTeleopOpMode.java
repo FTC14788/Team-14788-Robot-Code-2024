@@ -91,8 +91,8 @@ public class MainTeleopOpMode extends OpModeContainer {
     private Command scoringPositionManual() {
         return new ParallelCommandGroup(
             pivotSubsystem.goToPositionCommand(() -> 0.2),
-            elbowSubsystem.goToPositionCommand(() -> -0.03),
-            extensionSubsystem.goToPositionCommand(() -> 15)
+            elbowSubsystem.goToPositionCommand(() -> 0.0),
+            extensionSubsystem.goToPositionCommand(() -> 20)
         );
     }
 

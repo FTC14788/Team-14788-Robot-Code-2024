@@ -31,7 +31,7 @@ public class ExtensionSubsystem extends SubsystemBase {
     private boolean homing = true;
     private double currentCutoff = 4;
 
-    private PIDFCoefficients pidfCoefficients = new PIDFCoefficients(16, 0, 0, 0);
+    private PIDFCoefficients pidfCoefficients = new PIDFCoefficients(13, 0, 0, 0);
 
     public ExtensionSubsystem(HardwareMap hardwareMap) {
         extension = hardwareMap.get(DcMotorEx.class, "extension");
@@ -73,7 +73,7 @@ public class ExtensionSubsystem extends SubsystemBase {
     }
 
     public void setTeleopDefaultCommand() {
-        setDefaultCommand(goToPositionCommand(() -> 0));
+        setDefaultCommand(goToPositionCommand(() -> 0.25));
     }
 
     public void findOffset(double currentCutoff) {

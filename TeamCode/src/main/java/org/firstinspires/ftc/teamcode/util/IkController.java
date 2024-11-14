@@ -8,11 +8,14 @@ public class IkController {
         if (dist >= SuperstructureConstants.NORMALIZATION_DIST) {
             dist = SuperstructureConstants.NORMALIZATION_DIST;
         }
+        if (dist <= 2) {
+            dist = 2;
+        }
 
         double x = dist + SuperstructureConstants.CHASSIS_FRONT_TO_PIVOT;
         double y = -SuperstructureConstants.PIVOT_HEIGHT + SuperstructureConstants.INTAKE_HEIGHT;
 
-        x -= y/130;
+        y += Math.pow((dist/20), 2.2);
         
         double fixedAngle = Math.acos(x / SuperstructureConstants.NORMALIZATION_DIST);
         fixedAngle = 0.53 * Math.PI;
