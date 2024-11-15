@@ -37,6 +37,18 @@ public class MainTeleopOpMode extends OpModeContainer {
             scoringPositionManual()
         );
 
+        new GamepadButton(operatorController, GamepadKeys.Button.X).whenPressed(
+                () -> zero()
+        );
+
+        new GamepadButton(operatorController, GamepadKeys.Button.DPAD_UP).whenPressed(
+                () -> bumpUp()
+        );
+
+        new GamepadButton(operatorController, GamepadKeys.Button.DPAD_DOWN).whenPressed(
+                () -> bumpDown()
+        );
+
         new GamepadButton(operatorController, GamepadKeys.Button.RIGHT_BUMPER).whileHeld(
             intakeWithStick(() -> -operatorController.getRightY())
         );
@@ -70,6 +82,21 @@ public class MainTeleopOpMode extends OpModeContainer {
             fieldOrientedTeleop = true;
         }
     }
+
+    private void zero() {
+        pivotSubsystem.homing = true;
+        elbowSubsystem.homing = true;
+        extensionSubsystem.homing = true;
+    }
+
+    private void bumpUp() {
+        SuperstructureConstants.INTAKE_HEIGHT += 0.15;
+    }
+
+    private void bumpDown() {
+        SuperstructureConstants.INTAKE_HEIGHT += 0.15;
+    }
+
 
     private Command intakeWithDist(DoubleSupplier dist) {
         return new ParallelCommandGroup(

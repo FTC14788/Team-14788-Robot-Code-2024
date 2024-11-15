@@ -43,7 +43,9 @@ public class OctoquadManager extends SubsystemBase {
     }
 
     public static void createInstance(HardwareMap hardwareMap) {
-        instance = new OctoquadManager(hardwareMap);
+        if (instance == null) {
+            instance = new OctoquadManager(hardwareMap);
+        }
     }
 
     public static OctoquadManager getInstance() {

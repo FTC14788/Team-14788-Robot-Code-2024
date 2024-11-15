@@ -28,7 +28,7 @@ public class ExtensionSubsystem extends SubsystemBase {
 
     private double targetPosition = 0;
 
-    private boolean homing = true;
+    public boolean homing = true;
     private double currentCutoff = 4;
 
     private PIDFCoefficients pidfCoefficients = new PIDFCoefficients(13, 0, 0, 0);

@@ -15,7 +15,7 @@ public class IkController {
         double x = dist + SuperstructureConstants.CHASSIS_FRONT_TO_PIVOT;
         double y = -SuperstructureConstants.PIVOT_HEIGHT + SuperstructureConstants.INTAKE_HEIGHT;
 
-        y += Math.pow((dist/20), 2.2);
+        y += Math.pow((dist/12.5), 1.5);
         
         double fixedAngle = Math.acos(x / SuperstructureConstants.NORMALIZATION_DIST);
         fixedAngle = 0.53 * Math.PI;

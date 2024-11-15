@@ -32,14 +32,17 @@ abstract public class OpModeContainer extends CommandOpMode {
 
     protected boolean fieldOrientedTeleop = false;
 
+
     protected void initHardware(Enum OpModeType) {
         OctoquadManager.createInstance(hardwareMap);
         MecanumSubsystem.createInstance(hardwareMap);
+        PivotSubsystem.createInstance(hardwareMap);
+        ElbowSubsystem.createInstance(hardwareMap);
 
         octoquadManager = OctoquadManager.getInstance();
         mecanumSubsystem = MecanumSubsystem.getInstance();
-        pivotSubsystem = new PivotSubsystem(hardwareMap);
-        elbowSubsystem = new ElbowSubsystem(hardwareMap);
+        pivotSubsystem = PivotSubsystem.getInstance();
+        elbowSubsystem = ElbowSubsystem.getInstance();
         extensionSubsystem = new ExtensionSubsystem(hardwareMap);
         liftSubsystem = new LiftSubsystem(hardwareMap);
         intakeSubsystem = new IntakeSubsystem(hardwareMap);

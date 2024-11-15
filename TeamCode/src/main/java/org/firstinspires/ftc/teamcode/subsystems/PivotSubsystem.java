@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.util.PIDFController;
 import java.util.function.DoubleSupplier;
 
 public class PivotSubsystem extends SubsystemBase {
+    private static PivotSubsystem instance;
 
     private final DcMotorEx pivot;
 
@@ -26,13 +27,13 @@ public class PivotSubsystem extends SubsystemBase {
     private final DoubleSupplier supplyCurrent;
 
     private double encoderOffset = 0;
-    private boolean homing = true;
+    public boolean homing = true;
     private double currentCutoff = 4;
 
     private double targetPosition = 0;
 
     private PIDFController pivotPIDF;
-    private CustomPIDFCoefficients pidfCoefficients = new CustomPIDFCoefficients(0.0055, 0.0002, 0.000, 0);
+    private CustomPIDFCoefficients pidfCoefficients = new CustomPIDFCoefficients(0.006, 0.0002, 0.000, 0);
 
     public PivotSubsystem(HardwareMap hardwareMap) {
 
@@ -46,6 +47,21 @@ public class PivotSubsystem extends SubsystemBase {
         pivot.setDirection(DcMotorSimple.Direction.REVERSE);
 
         pivotPIDF = new PIDFController(pidfCoefficients);
+    }
+
+    public static void createInstance(HardwareMap hardwareMap) {
+        if (instance == null) {
+            instance = new PivotSubsystem(hardwareMap);
+        }
+    }
+
+    public static PivotSubsystem getInstance() {
+        if (instance != null) {
+            return instance;
+        } else {
+            System.out.println("Pivot Subsystem not instantiated");
+            return null;
+        }
     }
 
     @Override

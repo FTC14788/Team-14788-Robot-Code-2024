@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.util.PIDFController;
 import java.util.function.DoubleSupplier;
 
 public class ElbowSubsystem extends SubsystemBase {
+    private static ElbowSubsystem instance;
 
     private final DcMotorEx elbow;
 
@@ -25,7 +26,7 @@ public class ElbowSubsystem extends SubsystemBase {
     private final DoubleSupplier supplyCurrent;
 
     private double encoderOffset = 0;
-    private boolean homing = true;
+    public boolean homing = true;
     private double currentCutoff = 4;
 
     private double targetPosition = 0;
@@ -45,6 +46,21 @@ public class ElbowSubsystem extends SubsystemBase {
         elbow.setDirection(DcMotorSimple.Direction.REVERSE);
 
         pivotPIDF = new PIDFController(pidfCoefficients);
+    }
+
+    public static void createInstance(HardwareMap hardwareMap) {
+        if (instance == null) {
+            instance = new ElbowSubsystem(hardwareMap);
+        }
+    }
+
+    public static ElbowSubsystem getInstance() {
+        if (instance != null) {
+            return instance;
+        } else {
+            System.out.println("Elbow Subsystem not instantiated");
+            return null;
+        }
     }
 
     @Override
