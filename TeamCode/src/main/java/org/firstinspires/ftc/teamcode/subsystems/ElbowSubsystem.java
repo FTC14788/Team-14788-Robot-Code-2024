@@ -26,9 +26,10 @@ public class ElbowSubsystem extends SubsystemBase {
     private final DoubleSupplier supplyCurrent;
 
     private double encoderOffset = 0;
-    public boolean homing = true;
+    public boolean homing = false;
     private double currentCutoff = 4;
 
+    private double manualInputPower = 0;
     private double targetPosition = 0;
 
     private PIDFController pivotPIDF;
@@ -43,7 +44,7 @@ public class ElbowSubsystem extends SubsystemBase {
         supplyCurrent = (() -> elbow.getCurrent(CurrentUnit.AMPS));
 
         elbow.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        elbow.setDirection(DcMotorSimple.Direction.REVERSE);
+        elbow.setDirection(DcMotorSimple.Direction.FORWARD);
 
         pivotPIDF = new PIDFController(pidfCoefficients);
     }
@@ -65,9 +66,9 @@ public class ElbowSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println("Current: " + currentPosition.getAsDouble() + " Target: " + targetPosition);
+//        System.out.println("Current: " + currentPosition.getAsDouble() + " Target: " + targetPosition);
 
-        elbow.setDirection(DcMotorSimple.Direction.REVERSE);
+        elbow.setDirection(DcMotorSimple.Direction.FORWARD);
         if (homing) {
             elbow.setPower(0.8);
         }
@@ -79,8 +80,13 @@ public class ElbowSubsystem extends SubsystemBase {
         }
 
         if (!homing) {
-            elbow.setPower(calculateOutput((int) Math.round(targetPosition)));
+            elbow.setPower(manualInputPower);
+//            elbow.setPower(calculateOutput((int) Math.round(targetPosition)));
         }
+    }
+
+    public void setManualInputPower(Double input) {
+        manualInputPower = input;
     }
 
     public boolean isHoming() {
@@ -115,9 +121,7 @@ public class ElbowSubsystem extends SubsystemBase {
         homing = true;
     }
 
-    public void setTeleopDefaultCommand() {
-        setDefaultCommand(goToPositionCommand(() -> -0.3));
-    }
+    public void setTeleopDefaultCommand() {}
 
     public Command goToPositionCommand(DoubleSupplier position) {
         return new RunCommand(() -> goToPosition(position.getAsDouble()), this);

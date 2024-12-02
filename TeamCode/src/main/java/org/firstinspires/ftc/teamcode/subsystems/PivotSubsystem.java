@@ -27,9 +27,10 @@ public class PivotSubsystem extends SubsystemBase {
     private final DoubleSupplier supplyCurrent;
 
     private double encoderOffset = 0;
-    public boolean homing = true;
+    public boolean homing = false;
     private double currentCutoff = 4;
 
+    private double manualInputPower = 0;
     private double targetPosition = 0;
 
     private PIDFController pivotPIDF;
@@ -83,8 +84,13 @@ public class PivotSubsystem extends SubsystemBase {
             if (StateMachine.getInstance().elbowHoming().getAsBoolean()) {
                 goToPosition(0.13);
             }
-            pivot.setPower(calculateOutput((int) Math.round(targetPosition)));
+            pivot.setPower(manualInputPower);
+//            pivot.setPower(calculateOutput((int) Math.round(targetPosition)));
         }
+    }
+
+    public void setManualInputPower(Double input) {
+        manualInputPower = input;
     }
 
     public double getCurrentPosition() {
@@ -95,9 +101,7 @@ public class PivotSubsystem extends SubsystemBase {
         return targetPosition;
     }
 
-    public void setTeleopDefaultCommand() {
-        setDefaultCommand(goToPositionCommand(() -> 0.25));
-    }
+    public void setTeleopDefaultCommand() {}
 
     private double calculateOutput(int target) {
         pivotPIDF.setTargetPosition((double)target);

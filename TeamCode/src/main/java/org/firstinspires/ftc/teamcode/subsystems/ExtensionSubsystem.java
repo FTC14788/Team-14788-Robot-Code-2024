@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.constants.ElbowConstants;
 import org.firstinspires.ftc.teamcode.constants.ExtensionConstants;
@@ -26,10 +27,12 @@ public class ExtensionSubsystem extends SubsystemBase {
     private final DoubleSupplier currentPosition;
     private final DoubleSupplier supplyCurrent;
 
+
+    private double inches = 0.25;
     private double targetPosition = 0;
 
     public boolean homing = true;
-    private double currentCutoff = 4;
+    private double currentCutoff = 2;
 
     private PIDFCoefficients pidfCoefficients = new PIDFCoefficients(13, 0, 0, 0);
 
@@ -45,7 +48,12 @@ public class ExtensionSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-//        System.out.println(extension.getCurrentPosition() + " " + extension.getTargetPosition());
+        if (inches == 0.25) {
+            if (supplyCurrent.getAsDouble() >= 2.5 && extension.getVelocity(AngleUnit.DEGREES) <= 180) {
+//                homing = true;
+            }
+        }
+
         if (homing) {
             extension.setPower(-0.6);
         }
@@ -55,13 +63,31 @@ public class ExtensionSubsystem extends SubsystemBase {
             extension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             homing = false;
             extension.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, pidfCoefficients);
+
         }
 
         if (!homing) {
             extension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             extension.setPower(1);
             extension.setTargetPosition((int) Math.round(targetPosition));
+
         }
+    }
+
+    public void setManualInputPosition(Double input) {
+        inches += input / 2;
+        if (inches > ExtensionConstants.MAX_EXTENSION_SPEEDY) {
+            inches = ExtensionConstants.MAX_EXTENSION_SPEEDY;
+        }
+
+        if (inches < 0.25) {
+            inches = 0.25;
+
+        }
+
+        double revolutionsPerMillimeter = (5.8 / 696.0);
+        double ticksPerRevolution = 537.7;
+        targetPosition = ((inches * 25.4) * revolutionsPerMillimeter) * (ticksPerRevolution / 1);
     }
 
     public double getCurrentPosition() {

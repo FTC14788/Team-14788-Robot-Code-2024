@@ -49,7 +49,7 @@ abstract public class OpModeContainer extends CommandOpMode {
 
         StateMachine.createInstance(pivotSubsystem, elbowSubsystem, extensionSubsystem, liftSubsystem);
 
-        register(mecanumSubsystem, octoquadManager, pivotSubsystem, extensionSubsystem, liftSubsystem, intakeSubsystem);
+        register(mecanumSubsystem, octoquadManager, pivotSubsystem, elbowSubsystem, extensionSubsystem, liftSubsystem, intakeSubsystem);
 
         driverController = new GamepadEx(gamepad1);
         operatorController = new GamepadEx(gamepad2);

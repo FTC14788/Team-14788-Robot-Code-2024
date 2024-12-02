@@ -21,10 +21,11 @@ public class LiftSubsystem extends SubsystemBase {
     private final DoubleSupplier currentPosition;
     private final DoubleSupplier supplyCurrent;
 
+    private double manualInputPower = 0;
     private double targetPosition = 0;
 
-    private boolean homing = true;
-    private double currentCutoff = 3;
+    private boolean homing = false;
+    private double currentCutoff = 2;
 
     private PIDFCoefficients pidfCoefficients = new PIDFCoefficients(0.1, 0, 0, 0);
 
@@ -52,10 +53,15 @@ public class LiftSubsystem extends SubsystemBase {
         }
 
         if (!homing) {
-            life.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            life.setPower(1);
-            life.setTargetPosition((int) Math.round(targetPosition));
+            life.setPower(manualInputPower);
+//            life.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            life.setPower(1);
+//            life.setTargetPosition((int) Math.round(targetPosition));
         }
+    }
+
+    public void setManualInputPower(Double input) {
+        manualInputPower = input;
     }
 
     public double getCurrentPosition() {
@@ -67,7 +73,7 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     public void setTeleopDefaultCommand() {
-        setDefaultCommand(goToPositionCommand(() -> 0));
+        setDefaultCommand(new RunCommand(() -> setManualInputPower(0.0), this));
     }
 
     public void findOffset(double currentCutoff) {

@@ -32,7 +32,7 @@ public class OctoquadManager extends SubsystemBase {
     private OctoquadManager(HardwareMap hardwareMap) {
         octo = hardwareMap.get(OctoQuad.class, "octoquad");
 
-        octo.setSingleEncoderDirection(PAR_0,  OctoQuad.EncoderDirection.REVERSE);
+        octo.setSingleEncoderDirection(PAR_0,  OctoQuad.EncoderDirection.FORWARD);
         octo.setSingleEncoderDirection(PAR_1, OctoQuad.EncoderDirection.FORWARD);
         octo.setSingleEncoderDirection(PAR_2,  OctoQuad.EncoderDirection.FORWARD);
         octo.setSingleEncoderDirection(PIVOT_REMOTE, OctoQuad.EncoderDirection.REVERSE);
@@ -43,9 +43,9 @@ public class OctoquadManager extends SubsystemBase {
     }
 
     public static void createInstance(HardwareMap hardwareMap) {
-        if (instance == null) {
+//        if (instance == null) {
             instance = new OctoquadManager(hardwareMap);
-        }
+//        }
     }
 
     public static OctoquadManager getInstance() {

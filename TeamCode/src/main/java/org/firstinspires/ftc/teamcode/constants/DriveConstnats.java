@@ -34,7 +34,7 @@ public class DriveConstnats {
     public static CustomPIDFCoefficients translationalPIDFCoefficients = new CustomPIDFCoefficients(
             0.1,
             0,
-            0,
+            0.00,
             0);
 
     // Translational Integral
@@ -61,7 +61,7 @@ public class DriveConstnats {
 
     // Drive PIDF coefficients
     public static CustomFilteredPIDFCoefficients drivePIDFCoefficients = new CustomFilteredPIDFCoefficients(
-            0.025,
+            0.002,
             0,
             0.00001,
             0.6,
@@ -90,7 +90,7 @@ public class DriveConstnats {
 
 
     // Mass of robot in kilograms
-    public static double mass = 10.65942;
+    public static double mass = 20;
 
     // Centripetal force to power scaling
     public static double centripetalScaling = 0.0005;
@@ -117,7 +117,7 @@ public class DriveConstnats {
     // When the robot is at the end of its current Path or PathChain and the velocity goes below
     // this value, then end the Path. This is in inches/second.
     // This can be custom set for each Path.
-    public static double pathEndVelocityConstraint = 0.1;
+    public static double pathEndVelocityConstraint = 0.075;
 
     // When the robot is at the end of its current Path or PathChain and the translational error
     // goes below this value, then end the Path. This is in inches.

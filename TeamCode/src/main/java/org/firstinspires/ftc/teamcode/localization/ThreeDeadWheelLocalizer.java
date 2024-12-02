@@ -33,7 +33,7 @@ import java.util.concurrent.Executors;
 public final class ThreeDeadWheelLocalizer extends Localizer {
     public static LocalizerConstants localizerConstants = new LocalizerConstants();
 
-    public double inPerTick = 0.002948; //0.002934; //24.0 / 8163.0;;
+    public double inPerTick = localizerConstants.INCHES_PER_TICK; //0.002934; //24.0 / 8163.0;;
 
     private int lastPar0Pos, lastPar1Pos, lastPerpPos;
 

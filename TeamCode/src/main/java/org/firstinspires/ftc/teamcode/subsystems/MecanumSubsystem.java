@@ -151,6 +151,8 @@ public class MecanumSubsystem implements Subsystem {
     public MecanumSubsystem(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
         initialize();
+
+        setPose(new Pose(-45, 10, Math.PI / 2));
     }
 
     public static void createInstance(HardwareMap hardwareMap) {
@@ -201,7 +203,7 @@ public class MecanumSubsystem implements Subsystem {
         }
 
         for (DcMotorEx motor : motors) {
-            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
 
         dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
@@ -212,6 +214,7 @@ public class MecanumSubsystem implements Subsystem {
 
     @Override
     public void periodic(){
+        System.out.println(getPose().getX() + " " + getPose().getY() + " " + getPose().getTheta());
 
         update();
         poseUpdater.update();

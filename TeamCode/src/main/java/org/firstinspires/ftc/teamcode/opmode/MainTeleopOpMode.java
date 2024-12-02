@@ -13,7 +13,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.constants.ExtensionConstants;
 import org.firstinspires.ftc.teamcode.constants.SuperstructureConstants;
+import org.firstinspires.ftc.teamcode.localization.Pose;
+import org.firstinspires.ftc.teamcode.pathGeneration.BezierPoint;
+import org.firstinspires.ftc.teamcode.pathGeneration.Point;
+import org.firstinspires.ftc.teamcode.paths.Paths;
 import org.firstinspires.ftc.teamcode.subsystems.StateMachine;
+import org.firstinspires.ftc.teamcode.util.Deadband;
 import org.firstinspires.ftc.teamcode.util.IkController;
 import org.firstinspires.ftc.teamcode.util.OpModeContainer;
 
@@ -27,51 +32,63 @@ public class MainTeleopOpMode extends OpModeContainer {
         initHardware(OpModeType.TELEOP);
         mecanumSubsystem.startTeleopDrive();
 
-        pivotSubsystem.setTeleopDefaultCommand();
-        elbowSubsystem.setTeleopDefaultCommand();
-        extensionSubsystem.setTeleopDefaultCommand();
+//        pivotSubsystem.setTeleopDefaultCommand();
+//        elbowSubsystem.setTeleopDefaultCommand();
+//        extensionSubsystem.setTeleopDefaultCommand();
         intakeSubsystem.setTeleopDefaultCommand();
         liftSubsystem.setTeleopDefaultCommand();
 
         new GamepadButton(operatorController, GamepadKeys.Button.B).whileHeld(
-            scoringPositionManual()
+                () -> mecanumSubsystem.followPath(Paths.spikeThreePieceScorePush(), false)
+        );
+        new GamepadButton(operatorController, GamepadKeys.Button.Y).whileHeld(
+                new RunCommand(() -> liftSubsystem.setManualInputPower(1.0), liftSubsystem)
+        );
+
+        new GamepadButton(operatorController, GamepadKeys.Button.A).whileHeld(
+                new RunCommand(() -> liftSubsystem.setManualInputPower(-1.0), liftSubsystem)
         );
 
         new GamepadButton(operatorController, GamepadKeys.Button.X).whenPressed(
-                () -> zero()
+                () -> mecanumSubsystem.setPose(new Pose(-9, 10, Math.PI / 2))
         );
 
-        new GamepadButton(operatorController, GamepadKeys.Button.DPAD_UP).whenPressed(
-                () -> bumpUp()
-        );
-
-        new GamepadButton(operatorController, GamepadKeys.Button.DPAD_DOWN).whenPressed(
-                () -> bumpDown()
-        );
+//        new GamepadButton(operatorController, GamepadKeys.Button.DPAD_UP).whenPressed(
+//                () -> bumpUp()
+//        );
+//
+//        new GamepadButton(operatorController, GamepadKeys.Button.DPAD_DOWN).whenPressed(
+//                () -> bumpDown()
+//        );
 
         new GamepadButton(operatorController, GamepadKeys.Button.RIGHT_BUMPER).whileHeld(
-            intakeWithStick(() -> -operatorController.getRightY())
+                intakeSubsystem.runWithPowerCommand(() -> -1)
         );
 
         new GamepadButton(operatorController, GamepadKeys.Button.LEFT_BUMPER).whileHeld(
-            intakeSubsystem.runWithPowerCommand(() -> -1)
+            intakeSubsystem.runWithPowerCommand(() -> 1)
         );
 
         new GamepadButton(operatorController, GamepadKeys.Button.Y).whenPressed(climb());
 
-        new GamepadButton(driverController, GamepadKeys.Button.X).whenPressed(
-            new ParallelDeadlineGroup(
-                new WaitCommand(150),
-                new RunCommand(() -> switchDriveMode())
-            )
-        );
+//        new GamepadButton(driverController, GamepadKeys.Button.X).whenPressed(
+//            new ParallelDeadlineGroup(
+//                new WaitCommand(150),
+//                new RunCommand(() -> switchDriveMode())
+//            )
+//        );
     }
 
     @Override
     public void run() {
         super.run();
 
-        mecanumSubsystem.setTeleOpMovementVectors(driverController.getLeftY(), -driverController.getLeftX(), -driverController.getRightX(), true);
+        mecanumSubsystem.setTeleOpMovementVectors(Math.pow(Deadband.apply(driverController.getLeftX(), driverController.getLeftY(), true, 0.01, 0.125), 3), Math.pow(-Deadband.apply(driverController.getLeftX(), driverController.getLeftY(), false, 0.01, 0.125), 3), Deadband.apply(-driverController.getRightX(), 0, false, 0.01, 0), true);
+        pivotSubsystem.setManualInputPower(-operatorController.getLeftY());
+        elbowSubsystem.setManualInputPower(-operatorController.getRightY());
+        extensionSubsystem.setManualInputPosition(operatorController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER));
+        extensionSubsystem.setManualInputPosition(-operatorController.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER));
+
 //        mecanumSubsystem.setTeleOpMovementVectors(driverController.getLeftY(), -driverController.getLeftX(), -driverController.getRightX(), false);
     }
 
