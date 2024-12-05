@@ -24,15 +24,23 @@ public class ExtensionSubsystem extends SubsystemBase {
 
     private final DcMotorEx extension;
 
+    private final double revolutionsPerMillimeter = (5.8 / 696.0);
+    private final double ticksPerRevolution = 537.7;
+
     private final DoubleSupplier currentPosition;
     private final DoubleSupplier supplyCurrent;
 
-
+    private double overTimeStart = 0;
+    private double overTime = 0;
     private double inches = 0.25;
     private double targetPosition = 0;
 
     public boolean homing = true;
     private double currentCutoff = 2;
+
+    private double lastReset;
+
+    private double currentTime;
 
     private PIDFCoefficients pidfCoefficients = new PIDFCoefficients(13, 0, 0, 0);
 
@@ -41,6 +49,8 @@ public class ExtensionSubsystem extends SubsystemBase {
 
         extension.setDirection(DcMotorSimple.Direction.REVERSE);
         extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        currentTime = System.currentTimeMillis();
+        lastReset = Double.NEGATIVE_INFINITY;
 
         currentPosition = (() -> extension.getCurrentPosition());
         supplyCurrent = (() -> extension.getCurrent(CurrentUnit.AMPS));
@@ -48,25 +58,41 @@ public class ExtensionSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        currentTime = System.currentTimeMillis();
+        targetPosition = ((inches * 25.4) * revolutionsPerMillimeter) * (ticksPerRevolution / 1);
+
+
         if (inches == 0.25) {
-            if (supplyCurrent.getAsDouble() >= 2.5 && extension.getVelocity(AngleUnit.DEGREES) <= 180) {
-//                homing = true;
+            if (supplyCurrent.getAsDouble() >= currentCutoff && extension.getTargetPosition() <= ((0.25 * 25.4) * revolutionsPerMillimeter) * (ticksPerRevolution / 1)) {
+                homing = true;
             }
         }
 
-        if (homing) {
+        if (homing && supplyCurrent.getAsDouble() <= currentCutoff) {
+            extension.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             extension.setPower(-0.6);
+            System.out.println("DEALUFDHLKJDHF");
         }
 
         if (supplyCurrent.getAsDouble() > currentCutoff && homing) {
-            extension.setPower(0);
-            extension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            homing = false;
-            extension.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, pidfCoefficients);
+            if (Math.abs(currentTime - lastReset) >= 500) {
+                System.out.println("MOKEY MONK");
+                extension.setPower(1);
+                extension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                homing = false;
+                extension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                extension.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, pidfCoefficients);
+
+                lastReset = System.currentTimeMillis();
+            }
 
         }
 
+
+
         if (!homing) {
+            System.out.println("OVER CURRENT");
+
             extension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             extension.setPower(1);
             extension.setTargetPosition((int) Math.round(targetPosition));
@@ -75,7 +101,8 @@ public class ExtensionSubsystem extends SubsystemBase {
     }
 
     public void setManualInputPosition(Double input) {
-        inches += input / 2;
+        inches += input / 2.0;
+
         if (inches > ExtensionConstants.MAX_EXTENSION_SPEEDY) {
             inches = ExtensionConstants.MAX_EXTENSION_SPEEDY;
         }
@@ -85,9 +112,7 @@ public class ExtensionSubsystem extends SubsystemBase {
 
         }
 
-        double revolutionsPerMillimeter = (5.8 / 696.0);
-        double ticksPerRevolution = 537.7;
-        targetPosition = ((inches * 25.4) * revolutionsPerMillimeter) * (ticksPerRevolution / 1);
+
     }
 
     public double getCurrentPosition() {

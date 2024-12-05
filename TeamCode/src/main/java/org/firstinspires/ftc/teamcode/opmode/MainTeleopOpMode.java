@@ -38,9 +38,9 @@ public class MainTeleopOpMode extends OpModeContainer {
         intakeSubsystem.setTeleopDefaultCommand();
         liftSubsystem.setTeleopDefaultCommand();
 
-        new GamepadButton(operatorController, GamepadKeys.Button.B).whileHeld(
-                () -> mecanumSubsystem.followPath(Paths.spikeThreePieceScorePush(), false)
-        );
+//        new GamepadButton(operatorController, GamepadKeys.Button.B).whileHeld(
+//                () -> mecanumSubsystem.followPath(Paths.spikeThreePieceScorePush(), false)
+//        );
         new GamepadButton(operatorController, GamepadKeys.Button.Y).whileHeld(
                 new RunCommand(() -> liftSubsystem.setManualInputPower(1.0), liftSubsystem)
         );
@@ -53,30 +53,16 @@ public class MainTeleopOpMode extends OpModeContainer {
                 () -> mecanumSubsystem.setPose(new Pose(-9, 10, Math.PI / 2))
         );
 
-//        new GamepadButton(operatorController, GamepadKeys.Button.DPAD_UP).whenPressed(
-//                () -> bumpUp()
-//        );
-//
-//        new GamepadButton(operatorController, GamepadKeys.Button.DPAD_DOWN).whenPressed(
-//                () -> bumpDown()
-//        );
 
         new GamepadButton(operatorController, GamepadKeys.Button.RIGHT_BUMPER).whileHeld(
-                intakeSubsystem.runWithPowerCommand(() -> -1)
+                intakeSubsystem.runWithPowerCommand(() -> 1)
         );
 
         new GamepadButton(operatorController, GamepadKeys.Button.LEFT_BUMPER).whileHeld(
-            intakeSubsystem.runWithPowerCommand(() -> 1)
+            intakeSubsystem.runWithPowerCommand(() -> -1)
         );
 
-        new GamepadButton(operatorController, GamepadKeys.Button.Y).whenPressed(climb());
 
-//        new GamepadButton(driverController, GamepadKeys.Button.X).whenPressed(
-//            new ParallelDeadlineGroup(
-//                new WaitCommand(150),
-//                new RunCommand(() -> switchDriveMode())
-//            )
-//        );
     }
 
     @Override

@@ -214,7 +214,6 @@ public class MecanumSubsystem implements Subsystem {
 
     @Override
     public void periodic(){
-        System.out.println(getPose().getX() + " " + getPose().getY() + " " + getPose().getTheta());
 
         update();
         poseUpdater.update();
