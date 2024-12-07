@@ -159,6 +159,28 @@ public class Paths {
 
         path5.setConstantHeadingInterpolation(-0.5 * Math.PI);
 
+        Path useless = new Path(
+                new BezierCurve(
+                        new Point(new Pose(12, 26, 0)),
+                        new Point(new Pose(20, 20, 0))
+
+                )
+        );
+
+        useless.setConstantHeadingInterpolation(Math.PI);
+
+        Path wasteOfTime = new Path(
+                new BezierCurve(
+                        new Point(new Pose(20, 20, 0)),
+                        new Point(new Pose(16, 24, 0)),
+                        new Point(new Pose(18, 34, 0)),
+                        new Point(new Pose(20, 20, 0))
+
+                )
+        );
+
+        wasteOfTime.setConstantHeadingInterpolation(Math.PI);
+
         Path path6 = new Path(
                 new BezierCurve(
                         new Point(new Pose(12, 26, 0)),
@@ -170,7 +192,7 @@ public class Paths {
 
         path6.setConstantHeadingInterpolation(Math.PI);
 
-        return new PathChain(pathNegative0, path0, path1, path2, path3, path4, path5, path6);
+        return new PathChain(pathNegative0, path0, path1, path2, path3, path4, path5, useless, wasteOfTime, wasteOfTime, path6);
     }
 
     public static Path tuner() {
