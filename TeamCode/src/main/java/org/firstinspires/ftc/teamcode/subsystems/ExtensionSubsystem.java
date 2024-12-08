@@ -91,7 +91,7 @@ public class ExtensionSubsystem extends SubsystemBase {
 
 
         if (!homing) {
-            System.out.println("OVER CURRENT");
+//            System.out.println("OVER CURRENT");
 
             extension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             extension.setPower(1);

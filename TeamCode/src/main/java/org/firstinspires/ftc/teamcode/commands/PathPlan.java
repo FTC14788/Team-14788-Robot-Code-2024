@@ -7,13 +7,14 @@ import com.arcrobotics.ftclib.command.CommandScheduler;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumSubsystem;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class PathPlan extends CommandBase {
     private PathfolowingCommand pathFollowingCommand;
-    private HashMap<Map.Entry<Integer, Double>, Command> subsystemCommands;
+    private volatile HashMap<Double, Command> subsystemCommands;
 
-    public PathPlan(PathfolowingCommand pathFollowingCommand, HashMap<Map.Entry<Integer, Double>, Command> subsystemCommands) {
+    public PathPlan(PathfolowingCommand pathFollowingCommand, HashMap<Double, Command> subsystemCommands) {
         this.pathFollowingCommand = pathFollowingCommand;
         this.subsystemCommands = subsystemCommands;
 
@@ -27,20 +28,22 @@ public class PathPlan extends CommandBase {
 
     @Override
     public void execute() {
-        for (Map.Entry<Map.Entry<Integer, Double>, Command> subsystemCommand : subsystemCommands.entrySet()) {
-            if (!pathFollowingCommand.getPathStamp().containsKey(subsystemCommand.getKey().getKey())) {
-                return;
-            }
+        LinkedList<Double> remove = new  LinkedList<Double>();
 
-            if (subsystemCommand.getKey().getKey() == MecanumSubsystem.getInstance().getCurrentPathNumber()) {
-                if (subsystemCommand.getKey().getValue() >= pathFollowingCommand.getPathStamp().get(subsystemCommand.getKey().getKey())) {
+        for (Map.Entry<Double, Command> subsystemCommand : subsystemCommands.entrySet()) {
+            if (subsystemCommand.getKey().intValue() == (int) MecanumSubsystem.getInstance().getCurrentPathNumber()) {
+                if (subsystemCommand.getKey() - subsystemCommand.getKey().intValue() >= pathFollowingCommand.getPathStamp().get(subsystemCommand.getKey().intValue())) {
                     CommandScheduler.getInstance().schedule(subsystemCommand.getValue());
                     System.out.println("## Autocommand " + pathFollowingCommand.getName() + " scheduled ##");
-                    subsystemCommands.remove(subsystemCommand.getKey(), subsystemCommand.getValue());
+                    remove.add(subsystemCommand.getKey());
                 }
             } else {
                 return;
             }
+        }
+
+        for (int i = 0; i < remove.size(); i++) {
+            subsystemCommands.remove(remove.get(i));
         }
     }
 }

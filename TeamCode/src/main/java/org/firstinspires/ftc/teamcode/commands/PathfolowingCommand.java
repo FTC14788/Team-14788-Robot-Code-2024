@@ -6,12 +6,13 @@ import org.firstinspires.ftc.teamcode.pathGeneration.Path;
 import org.firstinspires.ftc.teamcode.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumSubsystem;
 
+import java.util.HashMap;
 import java.util.NavigableMap;
 
 public class PathfolowingCommand extends CommandBase {
     private PathChain paths;
 
-    private NavigableMap<Integer, Double> tValues;
+    private final HashMap<Integer, Double> tValues = new HashMap<Integer, Double>();
 
     public PathfolowingCommand(PathChain paths) {
         this.paths = paths;
@@ -46,7 +47,7 @@ public class PathfolowingCommand extends CommandBase {
         }
     }
 
-    public NavigableMap<Integer, Double> getPathStamp() {
+    public HashMap<Integer, Double> getPathStamp() {
         return tValues;
     }
 }

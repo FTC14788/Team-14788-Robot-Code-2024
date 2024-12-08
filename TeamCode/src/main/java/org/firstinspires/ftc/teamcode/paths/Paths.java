@@ -92,6 +92,7 @@ public class Paths {
 
         pathNegative0.setConstantHeadingInterpolation(-0.35 * Math.PI);
 
+
         Path path0 = new Path(
                 new BezierCurve(
                         new Point(new Pose(20, 12, 0)),
@@ -104,12 +105,12 @@ public class Paths {
 
         Path path1 = new Path(
                 new BezierCurve(
-                        new Point(new Pose(36, 50, 0)),
+                        new Point(new Pose(37.5, 50, 0)),
                         new Point(new Pose(36, 65, 0)),
                         new Point(new Pose(28, 65, 0)),
                         new Point(new Pose(28, 55, 0)),
                         new Point(new Pose(27, 45, 0)),
-                        new Point(new Pose(16, 24, 0))
+                        new Point(new Pose(18, 26, 0))
 
                 )
         );
@@ -118,9 +119,9 @@ public class Paths {
 
         Path path2 = new Path(
                 new BezierCurve(
-                        new Point(new Pose(24, 24, 0)),
-                        new Point(new Pose(24, 60, 0)),
-                        new Point(new Pose(16, 60, 0))
+                        new Point(new Pose(18, 26, 0)),
+                        new Point(new Pose(27, 35, 0)),
+                        new Point(new Pose(27, 50, 0))
                 )
         );
 
@@ -128,20 +129,22 @@ public class Paths {
 
         Path path3 = new Path(
                 new BezierCurve(
-                        new Point(new Pose(16, 60, 0)),
-                        new Point(new Pose(16, 50, 0)),
-                        new Point(new Pose(16, 26, 0))
+                        new Point(new Pose(27, 50, 0)),
+                        new Point(new Pose(26, 63, 0)),
+                        new Point(new Pose(17, 63, 0)),
+                        new Point(new Pose(16, 45, 0)),
+                        new Point(new Pose(18, 28, 0))
 
                 )
         );
 
-        path1.setLinearHeadingInterpolation(-0.5 * Math.PI, -0.65 * Math.PI);
+        path3.setLinearHeadingInterpolation(-0.5 * Math.PI, -0.7 * Math.PI);
 
         Path path4 = new Path(
                 new BezierCurve(
-                        new Point(new Pose(16, 26, 0)),
-                        new Point(new Pose(16, 62, 0)),
-                        new Point(new Pose(9.5, 62, 0))
+                        new Point(new Pose(18, 28, 0)),
+                        new Point(new Pose(16, 63, 0)),
+                        new Point(new Pose(9.5, 63, 0))
 
                 )
         );
@@ -150,40 +153,18 @@ public class Paths {
 
         Path path5 = new Path(
                 new BezierCurve(
-                        new Point(new Pose(9.5, 62, 0)),
+                        new Point(new Pose(9.5, 63, 0)),
                         new Point(new Pose(9.5, 30, 0)),
-                        new Point(new Pose(12, 26, 0))
+                        new Point(new Pose(11, 26, 0))
 
                 )
         );
 
         path5.setConstantHeadingInterpolation(-0.5 * Math.PI);
 
-        Path useless = new Path(
-                new BezierCurve(
-                        new Point(new Pose(12, 26, 0)),
-                        new Point(new Pose(20, 20, 0))
-
-                )
-        );
-
-        useless.setConstantHeadingInterpolation(Math.PI);
-
-        Path wasteOfTime = new Path(
-                new BezierCurve(
-                        new Point(new Pose(20, 20, 0)),
-                        new Point(new Pose(16, 24, 0)),
-                        new Point(new Pose(18, 34, 0)),
-                        new Point(new Pose(20, 20, 0))
-
-                )
-        );
-
-        wasteOfTime.setConstantHeadingInterpolation(Math.PI);
-
         Path path6 = new Path(
                 new BezierCurve(
-                        new Point(new Pose(12, 26, 0)),
+                        new Point(new Pose(11, 26, 0)),
                         new Point(new Pose(20, 20, 0)),
                         new Point(new Pose(125, 11, 0))
 
@@ -219,12 +200,12 @@ public class Paths {
 
         Path path1 = new Path(
                 new BezierCurve(
-                        new Point(new Pose(36, 50, 0)),
+                        new Point(new Pose(37.5, 50, 0)),
                         new Point(new Pose(36, 65, 0)),
                         new Point(new Pose(28, 65, 0)),
                         new Point(new Pose(28, 55, 0)),
                         new Point(new Pose(27, 45, 0)),
-                        new Point(new Pose(16, 24, 0))
+                        new Point(new Pose(18, 26, 0))
 
                 )
         );
@@ -233,9 +214,9 @@ public class Paths {
 
         Path path2 = new Path(
                 new BezierCurve(
-                        new Point(new Pose(24, 24, 0)),
-                        new Point(new Pose(24, 60, 0)),
-                        new Point(new Pose(16, 60, 0))
+                        new Point(new Pose(18, 26, 0)),
+                        new Point(new Pose(27, 35, 0)),
+                        new Point(new Pose(27, 50, 0))
                 )
         );
 
@@ -243,20 +224,22 @@ public class Paths {
 
         Path path3 = new Path(
                 new BezierCurve(
-                        new Point(new Pose(16, 60, 0)),
-                        new Point(new Pose(16, 50, 0)),
-                        new Point(new Pose(16, 26, 0))
+                        new Point(new Pose(27, 50, 0)),
+                        new Point(new Pose(26, 63, 0)),
+                        new Point(new Pose(17, 63, 0)),
+                        new Point(new Pose(16, 45, 0)),
+                        new Point(new Pose(18, 28, 0))
 
                 )
         );
 
-        path1.setLinearHeadingInterpolation(-0.5 * Math.PI, -0.65 * Math.PI);
+        path3.setLinearHeadingInterpolation(-0.5 * Math.PI, -0.7 * Math.PI);
 
         Path path4 = new Path(
                 new BezierCurve(
-                        new Point(new Pose(16, 26, 0)),
-                        new Point(new Pose(16, 62, 0)),
-                        new Point(new Pose(9.5, 62, 0))
+                        new Point(new Pose(18, 28, 0)),
+                        new Point(new Pose(16, 63, 0)),
+                        new Point(new Pose(9.5, 63, 0))
 
                 )
         );
@@ -265,42 +248,20 @@ public class Paths {
 
         Path path5 = new Path(
                 new BezierCurve(
-                        new Point(new Pose(9.5, 62, 0)),
+                        new Point(new Pose(9.5, 63, 0)),
                         new Point(new Pose(9.5, 30, 0)),
-                        new Point(new Pose(12, 26, 0))
+                        new Point(new Pose(11, 26, 0))
 
                 )
         );
 
         path5.setConstantHeadingInterpolation(-0.5 * Math.PI);
 
-        Path useless = new Path(
-                new BezierCurve(
-                        new Point(new Pose(12, 26, 0)),
-                        new Point(new Pose(20, 20, 0))
-
-                )
-        );
-
-        useless.setConstantHeadingInterpolation(Math.PI);
-
-        Path wasteOfTime = new Path(
-                new BezierCurve(
-                        new Point(new Pose(20, 20, 0)),
-                        new Point(new Pose(16, 24, 0)),
-                        new Point(new Pose(18, 34, 0)),
-                        new Point(new Pose(20, 20, 0))
-
-                )
-        );
-
-        wasteOfTime.setConstantHeadingInterpolation(Math.PI);
-
         Path path6 = new Path(
                 new BezierCurve(
-                        new Point(new Pose(12, 26, 0)),
+                        new Point(new Pose(11, 26, 0)),
                         new Point(new Pose(18, 68, 0)),
-                        new Point(new Pose(52, 68, 0))
+                        new Point(new Pose(47, 68, 0))
 
                 )
         );

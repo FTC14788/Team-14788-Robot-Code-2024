@@ -1,8 +1,12 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.RunCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -27,7 +31,7 @@ public class ElbowSubsystem extends SubsystemBase {
 
     private double encoderOffset = 0;
     public boolean homing = false;
-    private double currentCutoff = 4;
+    private double currentCutoff = 1.75;
 
     private double manualInputPower = 0;
     private double targetPosition = 0;
@@ -67,10 +71,11 @@ public class ElbowSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 //        System.out.println("Current: " + currentPosition.getAsDouble() + " Target: " + targetPosition);
+//        System.out.println(supplyCurrent.getAsDouble());
 
         elbow.setDirection(DcMotorSimple.Direction.FORWARD);
         if (homing) {
-            elbow.setPower(0.8);
+            elbow.setPower(1.0);
         }
 
         if (supplyCurrent.getAsDouble() > currentCutoff && homing) {
@@ -119,6 +124,14 @@ public class ElbowSubsystem extends SubsystemBase {
     public void findOffset(double currentCutoff) {
         this.currentCutoff = currentCutoff;
         homing = true;
+    }
+
+    public Command setPower() {
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> setManualInputPower(1.0)),
+                new WaitCommand(2500),
+                new InstantCommand(() -> setManualInputPower(0.0))
+        );
     }
 
     public void setTeleopDefaultCommand() {}
